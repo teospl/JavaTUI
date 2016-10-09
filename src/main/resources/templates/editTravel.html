@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Thymeleaf 3 + Spring 4 example</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form method="post" th:object="${travel}" action="#" th:action="@{/travel/edit(travelId=${travel.id})}" role="form">
+                <h2>Add travel
+                    <small th:text="#{travel.info}"></small>
+                </h2>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" th:placeholder="#{travel.hotel}"
+                           th:field="*{hotel}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('hotel')}" th:errors="*{hotel}"></p>
+                </div>
+
+                <div class="form-group">
+                    <p class="text-danger" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></p>
+                    <select th:placeholder="#{travel.country}" class="form-control" type="text" th:field="*{country}">
+                        <option th:each="current : ${countries}"
+                                th:value="${current}"
+                                th:text="${current}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" th:placeholder="#{travel.curort}"
+                           th:field="*{curort}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('curort')}" th:errors="*{curort}"></p>
+                </div>
+
+                <div class="form-group">
+                    <input th:placeholder="#{travel.description}" class="form-control" type="text" th:field="*{description}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" th:placeholder="#{travel.price}"
+                           th:field="*{price}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+                </div>
+
+                <div class="form-group">
+                    <p class="text-danger" th:if="${#fields.hasErrors('access')}" th:errors="*{access}"></p>
+                    <select class="form-control" type="text" th:placeholder="#{travel.access}" th:field="*{access}">
+                        <option th:each="current : ${accesses}"
+                                th:value="${current}"
+                                th:text="${current}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="date" th:placeholder="#{travel.startDate}" th:field="*{startDate}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
+                </div>
+
+                <div class="form-group">
+                    <p class="text-danger" th:if="${#fields.hasErrors('stay')}" th:errors="*{stay}"></p>
+                    <select class="form-control" type="text" th:placeholder="#{travel.stay}" th:field="*{stay}">
+                        <option th:each="current : ${stays}"
+                                th:value="${current}"
+                                th:text="${current}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <p class="text-danger" th:if="${#fields.hasErrors('food')}" th:errors="*{food}"></p>
+                    <select class="form-control" type="text" th:placeholder="#{travel.food}" th:field="*{food}">
+                        <option th:each="current : ${foods}"
+                                th:value="${current}"
+                                th:text="${current}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" th:placeholder="#{travel.photoUrl}"
+                           th:field="*{photoUrl}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('photoUrl')}" th:errors="*{photoUrl}"></p>
+                </div>
+
+                <input class="btn" type="submit" value="submit"/>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="javascript" th:src="@{/public/js/jquery-3.1.0.min.js}"></script>
+<script type="javascript" th:src="@{/public/js/bootstrap.min.js}"></script>
+<script type="javascript" th:src="@{/public/js/scripts.js}"></script>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>

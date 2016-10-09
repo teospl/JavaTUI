@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Nowa wiadomosc</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <script type="javascript" th:src="@{/js/jquery-3.1.0.min.js}"></script>
+    <script type="javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="javascript" th:src="@{/js/scripts.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form method="post" action="#" th:action="@{/message/new}" role="form" th:object="${data}">
+                <h2>New Message
+                    <small th:text="#{message.info}"></small>
+                </h2>
+
+                <div class="form-group">
+                    Data utworzenia:
+                    <input class="form-control" type="text" th:placeholder="#{message.date}" th:field="*{date}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></p>
+                </div>
+
+                <div class="form-group">
+                    Nadawca:
+                    <input class="form-control" type="text" th:placeholder="#{message.fromName}"
+                           th:field="*{fromName}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('fromName')}" th:errors="*{fromName}"></p>
+                </div>
+
+
+                <input class="form-control" type="hidden" th:placeholder="#{message.from}" th:field="*{from}"/>
+
+
+                <!--<div class="form-group">-->
+                <!--<input class="form-control" type="text" th:placeholder="#{message.to}" th:field="*{to}"/>-->
+                <!--<p class="text-danger" th:if="${#fields.hasErrors('to')}" th:errors="*{to}"></p>-->
+                <!--</div>-->
+                <!--<div sec:authorize="hasRole('ADMIN')">-->
+                <div class="form-group">
+                    Odbiorca:
+                    <p class="text-danger" th:if="${#fields.hasErrors('to')}" th:errors="*{to}"></p>
+                    <select class="form-control" type="text" th:placeholder="#{message.to}" th:field="*{to}">
+                        <option th:each="current : ${possibleUsers}"
+                                th:value="${current.id}"
+                                th:text="${current.firstName}+' '+${current.lastName}"></option>
+                    </select>
+                </div>
+                <!--</div>-->
+                <!--<div sec:authorize="hasRole('USER')">-->
+                <!--<input type="hidden" th:value="57ef75377f7ae51a2c9ea792" th:field="*{to}"/>-->
+                <!--<p>Wiadomość zostanie wysłana do przedstawiciela firmy.</p>-->
+                <!--</div>-->
+                <div class="form-group">
+                    Dotyczy wycieczki:
+                    <p class="text-danger" th:if="${#fields.hasErrors('travelId')}" th:errors="*{travelId}"></p>
+                    <select class="form-control" type="text" th:placeholder="#{message.travelId}"
+                            th:field="*{travelId}">
+                        <option th:each="current : ${possibleTravels}"
+                                th:value="${current.id}"
+                                th:text="${current.hotel}+' / '+${current.curort}+' / '+${current.startDate}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    Temat:
+                    <input th:placeholder="#{message.topic}" class="form-control" type="text" th:field="*{topic}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('topic')}" th:errors="*{topic}"></p>
+                </div>
+
+                <div class="form-group">
+                    Treść
+                    <textarea class="form-control" type="text" th:placeholder="#{message.message}"
+                              th:field="*{message}"></textarea>
+                    <p class="text-danger" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></p>
+                </div>
+
+                <!--<div class="form-group">-->
+                <!--<input class="form-control" type="date" th:placeholder="#{travel.startDate}" th:field="*{startDate}"/>-->
+                <!--<p class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>-->
+                <!--</div>-->
+
+
+                <input class="btn" type="submit" value="submit"/>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>

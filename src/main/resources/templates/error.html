@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf 3 + Spring 4 example</title>
+    <link th:href="@{/css/common/bootstrap.min.css}" rel="stylesheet" />
+    <script href="/js/jquery-3.1.0.min.js"/>
+    <script href="/js/bootstrap.min.js"/>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+<!--<div th:replace="fragments/search :: 'search'"></div>-->
+<h1>ERROR</h1>
+
+<p>
+Please try again
+</p>
+
+<div th:replace="fragments/footer :: 'footer'"></div>
+
+</body>
+</html>

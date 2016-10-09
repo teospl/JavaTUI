@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Thymeleaf 3 + Spring 4 example</title>
+    <script type="application/javascript" th:src="@{http://code.jquery.com/jquery-3.1.0.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+
+
+<!--<div th:each="current : ${travelList}">    &lt;!&ndash; th:object="${travelList}" &ndash;&gt;-->
+<!--<div class="panel panel-default">-->
+<!--&lt;!&ndash; Default panel contents &ndash;&gt;-->
+<!--<div class="panel-heading">Panel heading</div>-->
+<!--<div class="panel-body">-->
+<!--<ul>-->
+<!--<li th:text="${current.hotel}"></li>-->
+<!--<li th:text="${current.curort}"></li>-->
+<!--<li th:text="${current.country}"></li>-->
+<!--<li th:text="${current.startDate}"></li>-->
+<!--<li th:text="${current.price}"></li>-->
+<!--<li th:text="${current.stay}"></li>-->
+<!--<li th:text="${current.food}"></li>-->
+<!--<li th:text="${current.description}"></li>-->
+<!--</ul>-->
+<!--<img th:src="@{${current.photoUrl}}"/>-->
+<!--</div>-->
+<!--&lt;!&ndash;<table class="table">&ndash;&gt;-->
+<!--&lt;!&ndash;</table>&ndash;&gt;-->
+<!--<div class="panel-footer">-->
+<!--<a th:href="@{/travel/getTravel(travelId=${current.id})}">Zobacz peły opis wycieczki</a>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<div class="panel panel-default">
+    <div class="panel-body" th:each="current : ${messageList}">
+        <hr/>
+        <div class="item-container" >
+            <div class="container">    <!--th:object="${travel}"-->
+
+                <div class="col-md-12">
+                    <!--<div sec:authorize="hasRole('ADMIN')">-->
+                        <!--<a th:href="@{/travel/edit(travelId=${current.id})}">Edytuj</a> |-->
+                        <!--<a th:href="@{/travel/delete(travelId=${current.id})}">Usuń</a> |-->
+                        <!--<a th:href="@{/travel/new}">Dodaj wycieczkę</a>-->
+                    <!--</div>-->
+                    <div class="product-title">
+                        <p th:text="'Temat: '+${current.topic}"></p>
+                    </div>
+                    <div class="product-title">
+                        <p th:text="'Dotyczy wycieczki: ' + ${current.travelName}"></p>
+                    </div>
+                    <!--<div class="product-desc">-->
+                        <!---->
+                        <!--<p th:text="'Dotyczy wycieczki: '+${current.travelId}"></p>-->
+                    <!--</div>-->
+                    <div class="product-desc">
+                        <p th:text="'Nadana: '+${current.date}+' | Przez: '+${current.fromName}"></p>
+                    </div>
+
+
+                    <!--<div class="btn-group cart">-->
+                        <!--<button type="button" class="btn btn-success">-->
+                            <!--Zarezerwuj-->
+                        <!--</button>-->
+
+                    <!--</div>-->
+
+                    <div class="btn-group wishlist">
+                        <a th:href="@{/message/getMessage(messageId=${current.id})}">
+                            <button type="button" class="btn btn-danger">
+                                Zobacz treść wiadomości
+                            </button>
+                        </a>
+                    </div>
+
+                </div>
+                <hr/>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>

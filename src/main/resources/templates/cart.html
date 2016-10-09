@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Koszyk</title>
+    <script type="application/javascript" th:src="@{http://code.jquery.com/jquery-3.1.0.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+
+    <script type="javascript" th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+
+
+<!--<div th:each="current : ${travelList}">    &lt;!&ndash; th:object="${travelList}" &ndash;&gt;-->
+<!--<div class="panel panel-default">-->
+<!--&lt;!&ndash; Default panel contents &ndash;&gt;-->
+<!--<div class="panel-heading">Panel heading</div>-->
+<!--<div class="panel-body">-->
+<!--<ul>-->
+<!--<li th:text="${current.hotel}"></li>-->
+<!--<li th:text="${current.curort}"></li>-->
+<!--<li th:text="${current.country}"></li>-->
+<!--<li th:text="${current.startDate}"></li>-->
+<!--<li th:text="${current.price}"></li>-->
+<!--<li th:text="${current.stay}"></li>-->
+<!--<li th:text="${current.food}"></li>-->
+<!--<li th:text="${current.description}"></li>-->
+<!--</ul>-->
+<!--<img th:src="@{${current.photoUrl}}"/>-->
+<!--</div>-->
+<!--&lt;!&ndash;<table class="table">&ndash;&gt;-->
+<!--&lt;!&ndash;</table>&ndash;&gt;-->
+<!--<div class="panel-footer">-->
+<!--<a th:href="@{/travel/getTravel(travelId=${current.id})}">Zobacz peły opis wycieczki</a>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<div class="panel panel-default">
+    <div class="panel-body" th:each="current : ${productsList}">
+        <hr/>
+        <div class="item-container">
+            <div class="container">    <!--th:object="${travel}"-->
+
+                <div class="col-md-12">
+                    <script th:inline="javascript">
+
+
+                        function count(travelId, deadline) {
+                            var second = 1000;
+                            var minute = second * 60;
+                            var hour = minute * 60;
+                            var day = hour * 24;
+                            var end = new Date(deadline);
+
+                            setInterval(function () {
+                                var now = new Date();
+//                                console.log("end: " + end);
+//                                console.log("now: " + now);
+                                var distance = end - now;
+                                if (0 > distance) {
+                                    $("#time-left" + travelId).text("Życzymy miłego wyjazdu!");
+                                } else {
+                                    var days = Math.floor(distance / day);
+                                    var hours = Math.floor((distance % day) / hour);
+                                    var minutes = Math.floor((distance % hour) / minute);
+                                    var seconds = Math.floor((distance % minute) / second);
+                                    $("#time-left" + travelId).text("Dziękujemy za dokonanie płatności, do wyjazdu pozostało: " + days + " dni, " + hours + " godzin, " + minutes + " minut, " + seconds + " sekund.");
+                                }
+                            }, 1000);
+                        }
+                    </script>
+                    <div th:switch="${current.payment}">
+                        <div th:case="${false}">
+                            <div class="alert alert-info" role="alert">Prosimy o dokończenie zakupu.</div>
+                        </div>
+                        <div th:case="${true}">
+                            <script th:inline="javascript">
+                                count([[${current.id}]], [[${current.travelDate}]]);
+                                //                                timer = setInterval(count([[${current.id}]], [[${current.travelDate}]]), 1000);
+                            </script>
+                            <div class="alert alert-success" th:id="'time-left'+${current.id}" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <!--  -->
+                    <h2>Twoja podróż
+                        <small th:text="#{buy.info}"></small>
+                    </h2>
+                    <!--<div sec:authorize="hasRole('ADMIN')">-->
+                    <!--<a th:href="@{/travel/edit(travelId=${current.id})}">Edytuj</a> |-->
+                    <!--<a th:href="@{/travel/delete(travelId=${current.id})}">Usuń</a> |-->
+                    <!--<a th:href="@{/travel/new}">Dodaj wycieczkę</a>-->
+                    <!--</div>-->
+
+                    <div class="product-title">
+                        <p th:text="'Wycieczka: ' + ${current.travelName}"></p>
+                    </div>
+
+                    <script th:inline="javascript">
+                        function countPrice(id, price) {
+                            var priceOfOne = price;
+                            var seatsDiv = $('#seats' + id);
+                            var priceDiv = $('#pricePlace' + id);
+                            priceDiv.val(priceOfOne * seatsDiv.val());
+                        }
+                    </script>
+
+                    <div class="product-desc">
+                        <p th:text="'Dla użytkownika: ' + ${buyer}"></p>
+                        <!--<span sec:authentication="name">name</span>-->
+                        <!--<input type="hidden" th:value="${current.userId}"/>-->
+                    </div>
+
+
+                    <div class="product-desc">
+                        <p th:text="'Data wyjazdu: ' + ${current.travelDate}"></p>
+                        <!--<input type="hidden" th:value="${current.travelDate}"/>-->
+                    </div>
+
+                    <script th:inline="javascript">
+                        countPrice([[${current.id}]], [[${current.price}]]);
+                    </script>
+
+                    <div th:switch="${current.payment}">
+                        <div th:case="${false}">
+
+                            <form method="post" action="#" th:action="@{/cart/pay(cartId=${current.id})}" role="form"
+                                  th:object="${data}">
+                                <!--<input type="hidden" th:value="*{travelId}" th:field="*{travelId}"/>-->
+
+                                <h2>
+                                    <p th:text="#{cart.info}"></p>
+                                </h2>
+
+                                <div class="form-group">
+
+                                    <div class="product-price">
+                                        <label> Ilość miejsc: </label>
+                                        <input class="seats" type="number" th:id="'seats' + ${current.id}" min="1"
+                                               max="6"
+                                               th:field="*{seats}"
+                                               th:onchange="'setPrice()'"/>
+                                        <script th:inline="javascript">
+                                            $('#seats' + [[${current.id}]]).val(1);
+                                            function setPrice() {
+                                                countPrice([[${current.id}]], [[${current.price}]]);
+                                            }
+                                        </script>
+                                        <!-- th:onchange="'javascript:countPrice('+${current.id}+')'" -->
+                                    </div>
+
+                                    <!--<input type="range" name="points" min="1" max="5" th:field="*{rating}"/>-->
+                                </div>
+
+                                <div class="form-group">
+                                    <!--<input class="form-control" type="text" th:placeholder="#{rating.comment}"-->
+                                    <!--th:field="*{comment}"/>-->
+                                    <!--<p class="text-danger" th:if="${#fields.hasErrors('comment')}"-->
+                                    <!--th:errors="*{comment}"></p>-->
+
+                                    <div class="product-price">
+
+                                        <input th:id="'pricePlace' + ${current.id}" class="form-control" type="text"
+                                               th:placeholder="#{buy.price}" readonly="readonly"
+                                               th:field="*{price}"/>
+                                        <script th:inline="javascript">
+                                            $('#pricePlace' + [[${current.id}]]).val([[${current.price}]]);
+                                        </script>
+                                        <!-- th:value="*{price}" -->
+                                        <!--<p class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"> </p>-->
+
+                                        <!--<label> Cena: </label>-->
+                                        <!--<p th:text="${current.price}*('javascript:$(.seats'+${current.id}+')')"></p>-->
+                                        <!--<p th:id="'pricePlace' + ${current.id}"></p>-->
+                                    </div>
+                                </div>
+
+                                <!--<input class="btn" type="submit" value="submit"/>-->
+
+
+                                <div class="btn-group wishlist">
+                                    <!--<a th:href="@{/cart/pay(cartId=${current.id})}">-->
+                                    <button class="btn btn-danger" type="submit" value="submit">
+                                        Zapłać
+                                    </button>
+                                    <!--</a>-->
+                                </div>
+                            </form>
+                        </div>
+
+                        <div th:case="${true}">
+                            <div class="product-price">
+
+                                <p class="seats" th:id="'seats' + ${current.id}"
+                                   th:text="${'Ilość miejsc: '+current.seats}"></p>
+                                <!-- th:onchange="'javascript:countPrice('+${current.id}+')'" -->
+
+                                <p th:id="'pricePlace' + ${current.id}"
+                                   th:placeholder="#{buy.price}"
+                                   th:text="${'Zapłacono: '+current.price+' zł'}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <hr/>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>

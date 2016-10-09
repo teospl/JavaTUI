@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>JavaTUI Szczegóły podróży</title>
+    <script type="application/javascript" th:src="@{http://code.jquery.com/jquery-3.1.0.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+
+    <script type="javascript" th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+<div class="container">
+
+
+    <div th:object="${travel}">    <!--  th:each="current : ${travelList}" -->
+        <h3>Dane Wycieczki</h3>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <div class="item-container">
+                    <div class="container">
+
+                        <div class="col-md-7">
+
+                            <div class="pull-left">
+                                <center>
+                                    <img th:src="@{${travel.photoUrl}}" width="610px"/>
+                                </center>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div sec:authorize="hasRole('ADMIN')">
+                                <a th:href="@{/travel/edit(travelId=${travel.id})}">Edytuj</a> |
+                                <a th:href="@{/travel/delete(travelId=${travel.id})}">Usuń</a> |
+                                <a th:href="@{/travel/new}">Dodaj wycieczkę</a>
+                            </div>
+                            <div class="product-title">
+                                <p th:text="${travel.hotel}"></p>
+                            </div>
+                            <div class="product-desc">
+                                <p th:text="${travel.country}+' | '+${travel.curort}"></p>
+                            </div>
+
+                            <script th:inline="javascript">
+
+                                $(document).ready(function () {
+                                    var message = [[${travel.mainRate}]];
+                                    var starOn = '<i class="fa fa-star gold"></i>';
+                                    var starOff = '<i class="fa fa-star-o"></i>';
+                                    for (var i = 1; 6 > i; ++i) {
+                                        if (message >= i) {
+                                            $(".product-rating").append(starOn);
+                                        } else {
+                                            $(".product-rating").append(starOff)
+                                        }
+                                    }
+                                });
+                            </script>
+
+
+                            <div class="product-rating"></div>
+
+
+                            <hr/>
+                            <div class="product-price"><p th:text="'Cena: '+${travel.price}+' zł'"></p></div>
+                            <div class="product-price"><p th:text="'Srednia ocena: '+${travel.mainRate}"></p></div>
+
+
+                            <!--<div th:if="${travel.mainRate} << 4" class="label label-warning"-->
+                            <!--th:text="#{travel.onestar}"></div>-->
+                            <!--<div class="product-stock">In Stock</div>-->
+                            <hr/>
+                            <div class="btn-group cart">
+                                <a th:href="@{/cart/new(travelId=${travel.id})}">
+                                    <button type="button" class="btn btn-success">
+                                        Kup tą wycieczkę
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="btn-group cart">
+                                <a th:href="@{/message/new(userId=${null}, travelId=${travel.id})}">
+                                    <button type="button" class="btn btn-info">
+                                        Zadaj pytanie o tą wycieczkę
+                                    </button>
+                                </a>
+                            </div>
+                            <!--<div class="btn-group wishlist">-->
+                            <!--<button type="button" class="btn btn-danger">-->
+                            <!--Add to wishlist-->
+                            <!--</button>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+
+
+                <div class="container-fluid">
+                    <div class="col-md-12 product-info">
+                        <ul id="myTab" class="nav nav-tabs nav_tabs">
+
+                            <li class="active"><a href="#service-one" data-toggle="tab">Opis wycieczki</a></li>
+                            <!--<li><a href="#service-two" data-toggle="tab">PRODUCT INFO</a></li>-->
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade in active" id="service-one">
+
+                                <section class="container product-info">
+                                    <p th:text="${travel.description}"></p>
+                                    <h3>Szczegóły wyjazdu:</h3>
+                                    <ul>
+                                        <li th:text="'Data wyjazdu: ' + ${travel.startDate}"></li>
+                                        <li th:text="'Sposób podróży: ' + ${travel.access}"></li>
+                                        <li th:text="'Czas pobytu: ' + ${travel.stay}"></li>
+                                        <li th:text="'Wyżywienie: ' + ${travel.food}"></li>
+                                    </ul>
+                                </section>
+
+                            </div>
+
+
+                            <div class="tab-pane fade" id="service-two">
+
+                                <section class="container">
+
+                                </section>
+
+                            </div>
+                            <div class="tab-pane fade" id="service-three">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="col-md-12 product-info">
+                        <ul id="myTab" class="nav nav-tabs nav_tabs">
+
+                            <li class="active"><a href="#service-one" data-toggle="tab">Opinie o wycieczce</a></li>
+                            <!--<li><a href="#service-two" data-toggle="tab">PRODUCT INFO</a></li>-->
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+
+                            <div class="tab-pane fade in active" id="service-one">
+
+                                <form style="display: block" method="post" action="#" th:action="@{/travel/rate}" role="form"
+                                      th:object="${data}">
+                                    <input type="hidden" th:value="*{travelId}" th:field="*{travelId}"/>
+
+                                    <h2>
+                                        <p th:text="#{rating.info}"></p>
+                                    </h2>
+                                    <div class="form-group col-md-1">
+                                        <p style="padding-top: 8px">Ocena: </p>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <input class="form-control" type="range" name="points" min="1" max="5" th:field="*{rating}"/>
+                                    </div>
+
+                                    <div class="form-group col-md-7">
+                                        <input class="form-control" type="text" th:placeholder="#{rating.comment}"
+                                               th:field="*{comment}"/>
+                                        <p class="text-danger" th:if="${#fields.hasErrors('comment')}"
+                                           th:errors="*{comment}"></p>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                    <input class="btn" type="submit" value="Wyślij"/>
+                                    </div>
+
+                                    <h3 style="display: block"><br/> </h3>
+
+                                </form>
+
+
+                                <section class="container product-info">
+                                    <!--<p th:text="${travel.description}"></p>-->
+
+
+                                    <div th:each="current : ${ratingsList}">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading"><p
+                                                    th:text="'Opinia Klienta: '+${current.userId}"></p></div>
+
+
+                                            <div class="panel-body">
+                                                <input type="hidden" th:value="${current.id}"/>
+                                                <p th:text="'Ocena: '+${current.rating}"></p>
+                                                <p th:text="'Komentarz: '+${current.comment}"></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                            </div>
+
+
+                            <div class="tab-pane fade" id="service-two">
+
+                                <section class="container">
+
+                                </section>
+
+                            </div>
+                            <div class="tab-pane fade" id="service-three">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel-footer">
+                <!--<form method="post" action="#" th:action="@{/travel/rate(travelId=${travel.id})}" role="form" th:object="${data}">-->
+                <!--<h2>Add travel-->
+                <!--<small th:text="#{travel.info}"></small>-->
+                <!--</h2>-->
+                <!---->
+                <!--<div class="form-group">-->
+                <!--<input type="range" name="points" min="1" max="5" th:field="*{rating}"/>-->
+                <!--</div>-->
+
+                <!--<div class="form-group">-->
+                <!--<input class="form-control" type="text" th:placeholder="#{ratings.comment}"-->
+                <!--th:field="*{comment}"/>-->
+                <!--<p class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></p>-->
+                <!--</div>-->
+
+                <!--<input class="btn" type="submit" value="submit"/>-->
+                <!--</form>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>

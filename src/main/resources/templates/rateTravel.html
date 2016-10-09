@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf 3 + Spring 4 example</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form method="post" action="#" th:action="@{/travel/rate}" role="form" th:object="${data}">
+                <input type="hidden" th:value="*{travelId}" th:field="*{travelId}"/>
+
+                <h2>Add 9
+                    <small th:text="#{travel.info}"></small>
+                </h2>
+                <!--<div class="form-group">-->
+                <!--<input th:placeholder="#{travel.description}" class="form-control" type="text" th:field="*{description}"/>-->
+                <!--<p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>-->
+                <!--</div>-->
+
+
+                <!-- dwa pierwsze pola maja przyjac wartosci: userid i travelId -->
+
+                <!--<div class="form-group">-->
+                <!--<p class="text-danger" th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"></p>-->
+                <!--<select class="form-control" type="text" th:placeholder="#{ratings.rating}" th:field="*{selectedRating}">-->
+                <!--<option th:each="current : ${rating}"-->
+                <!--th:value="${current}"-->
+                <!--th:text="${current}"></option>-->
+                <!--</select>-->
+                <!--</div>-->
+
+                <div class="form-group">
+                    <input type="range" name="points" min="1" max="5" th:field="*{rating}"/>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" th:placeholder="#{ratings.comment}"
+                           th:field="*{comment}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></p>
+                </div>
+
+                <input class="btn" type="submit" value="submit"/>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script type="javascript" th:src="@{/public/js/jquery-3.1.0.min.js}"></script>
+<script type="javascript" th:src="@{/public/js/bootstrap.min.js}"></script>
+<script type="javascript" th:src="@{/public/js/scripts.js}"></script>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>

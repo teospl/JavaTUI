@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>JavaTUI Strona Glowna</title>
+    <script type="application/javascript" th:src="@{http://code.jquery.com/jquery-3.1.0.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+
+    <script type="javascript" th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post" action="#" th:action="@{/}" role="form" th:object="${searchDto}">
+                <div class="col-md-2">
+                    <b>Wyszukiwanie po kraju:</b><br/>
+                    <select th:field="*{selectedCountry}" class="form-control">
+                        <option th:each="current : ${countries}"
+                                th:value="${current}"
+                                th:text="${current}"></option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <b>Po sposobie dojazdu:</b><br/>
+                    <select th:field="*{selectedAccess}" class="form-control">
+                        <option th:each="current : ${accesses}"
+                                th:value="${current}"
+                                th:text="${current}"></option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <b>W terminie od, do:</b><br/>
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" th:placeholder="#{main.dateFrom}"
+                               th:field="*{dateFrom}"/>
+                        <p class="text-danger" th:if="${#fields.hasErrors('dateFrom')}" th:errors="*{dateFrom}"></p>
+                        <br/>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" th:placeholder="#{main.dateTo}" th:field="*{dateTo}"/>
+                        <p class="text-danger" th:if="${#fields.hasErrors('dateTo')}" th:errors="*{dateTo}"></p>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <b></b><br/>
+                    <input class="btn" type="submit" value="Ustaw parametry"/>
+                </div>
+
+                <div class="col-md-3">
+                    <b>Szukaj w serwisie:</b><br/>
+                    <input th:placeholder="#{main.expression}" class="form-control" type="text"
+                           th:field="*{expression}"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('expression')}"
+                       th:errors="*{expression}"></p>
+                </div>
+
+                <div class="col-md-1">
+                    <b></b><br/>
+                    <input class="btn" type="submit" value="Szukaj"/></div>
+
+            </form>
+        </div>
+        <!--<div class="col-md-4">-->
+        <!--<form method="post" action="#" th:action="@{/search}" role="form" th:object="${searchDto}">-->
+        <!--<div class="col-md-9">-->
+        <!--<b>Szukaj w serwisie:</b><br/>-->
+        <!--<input th:placeholder="#{main.regularExpression}" class="form-control" type="text" th:field="*{regularExpression}"/>-->
+        <!--<p class="text-danger" th:if="${#fields.hasErrors('regularExpression')}" th:errors="*{regularExpression}"></p>-->
+        <!--</div>-->
+        <!--<div class="col-md-3"><input class="btn" type="submit" value="Szukaj"/></div>-->
+
+        <!--</form>-->
+        <!--</div>-->
+    </div>
+</div>
+
+<div class="panel-body" th:each="current : ${travelList}">
+    <hr/>
+    <div class="item-container">
+        <div class="container">    <!--th:object="${travel}"-->
+
+            <div class="col-md-7">
+
+                <div class="pull-left">
+                    <center>
+                        <img th:src="@{${current.photoUrl}}" width="610px"/>
+                    </center>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/travel/edit(travelId=${current.id})}">Edytuj</a> |
+                    <a th:href="@{/travel/delete(travelId=${current.id})}">Usuń</a> |
+                    <a th:href="@{/travel/new}">Dodaj wycieczkę</a>
+                </div>
+                <div class="product-title">
+                    <p th:text="${current.hotel}"></p>
+                </div>
+                <div class="product-desc">
+                    <p th:text="${current.country}+' | '+${current.curort}"></p>
+                </div>
+                <div class="product-desc">
+                    <p th:text="${'Data wyjazdu: '+current.startDate}"></p>
+                </div>
+
+
+                <script th:inline="javascript">
+
+                    $(document).ready(function () {
+                        var message = [[${current.mainRate}]];
+                        var starOn = '<i class="fa fa-star gold"></i>';
+                        var starOff = '<i class="fa fa-star-o"></i>';
+                        for (var i = 1; 6 > i; ++i) {
+                            if (message >= i) {
+                                $('#productRating' + [[${current.id}]]).append(starOn);
+                            } else {
+                                $('#productRating' + [[${current.id}]]).append(starOff)
+                            }
+                        }
+                    });
+                </script>
+
+                <div class="product-rating" th:id="'productRating' + ${current.id}"></div>
+
+                <hr/>
+                <div class="product-price"><p th:text="'Cena: '+${current.price}+' zł'"></p></div>
+                <!--<div class="product-stock">In Stock</div>-->
+                <div class="btn-group cart">
+                    <a th:href="@{/cart/new(travelId=${current.id})}">
+                        <button type="button" class="btn btn-success">
+                            Kup tą wycieczkę
+                        </button>
+                    </a>
+                </div>
+                <hr/>
+
+
+                <div class="btn-group wishlist">
+                    <a th:href="@{/travel/getTravel(travelId=${current.id})}">
+                        <button type="button" class="btn btn-danger">
+                            Zobacz opis wycieczki
+                        </button>
+                    </a>
+                </div>
+
+                <div class="btn-group wishlist">
+                    <a th:href="@{/message/new(userId=${null}, travelId=${current.id})}">
+                        <button type="button" class="btn btn-info">
+                            Zapytaj o tą wycieczkę
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>

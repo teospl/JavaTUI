@@ -1,0 +1,16 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/common/bootstrap.min.css}" rel="stylesheet" />
+    <script href="/js/jquery-3.1.0.min.js"/>
+    <script href="/js/bootstrap.min.js"/>
+</head>
+<body>
+<!--/*  Multiple fragments may be defined in one file */-->
+<div th:fragment="footer" style="padding-top: 100px" >
+  <center>  &copy; 2013 Footer </center>
+</div>
+<div th:fragment="footer-admin" style="padding-top: 100px" >
+    &copy; 2013 Admin Footer
+</div>
+</body>
+</html>

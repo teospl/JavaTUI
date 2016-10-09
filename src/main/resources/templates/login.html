@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Spring Security Example </title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css"/>
+    <!--<link rel="stylesheet" href="http://bootsnipp.com/dist/bootsnipp.min.css?ver=7d23ff901039aef6293954d33d23c066">-->
+    <script type="javascript" th:src="@{/js/jquery-3.1.0.min.js}"></script>
+    <script type="javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="javascript" th:src="@{/js/scripts.js}"></script>
+</head>
+<body>
+
+
+<div th:replace="fragments/header :: 'top'"></div>
+
+
+<form th:action="@{/login}" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-5 col-md-3">
+                <div class="form-login" style="padding-top: 150px">
+                    <h4>Welcome Back</h4>
+                    <p th:if="${param.error}" class="bg-warning">Invalid username and password.</p>
+                    <p th:if="${param.logout}" class="bg-warning"> You have been logged out.</p>
+
+                    <input type="text" name="username" class="form-control input-sm chat-input" placeholder="username"/>
+                    <br/>
+                    <input type="password" name="password" class="form-control input-sm chat-input"
+                           placeholder="password"/>
+                    <br/>
+                    <div class="wrapper">
+                        <span class="group-btn">
+                           <input class="btn btn-primary btn-md" type="submit" value="Sign In"/>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<div th:replace="fragments/footer :: 'footer'"></div>
+
+</body>
+</html>

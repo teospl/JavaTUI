@@ -1,0 +1,83 @@
+buildscript {
+    ext {
+        slf4jVersion = "1.7.21"
+        springVersion = "4.2.5.RELEASE"
+        aspectVersion = "1.5.4"
+        thymeleafVersion = "2.1.5.RELEASE"
+    }
+    repositories {
+        // NOTE: You should declare only repositories that you need here
+        mavenLocal()
+        mavenCentral()
+        maven { url "http://repo.spring.io/release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'spring-boot-sample-simple'
+    version =  '0.0.0'
+}
+
+bootRun {
+    addResources = true
+    systemProperties = System.properties
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "http://repo.spring.io/release" }
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/snapshot" }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-actuator"
+    compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.springframework.boot:spring-boot-loader-tools"
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-starter-aop"
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb"
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile ("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile "org.springframework.boot:spring-boot-starter-undertow"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector"
+    compile "org.springframework.cloud:spring-cloud-spring-service-connector"
+    compile "org.springframework.cloud:spring-cloud-localconfig-connector"
+    compile ("org.springframework:spring-context-support") {
+        exclude(module: 'quartz')
+    }
+
+    compile "org.springframework.security:spring-security-config:${spring_security_version}"
+    compile "org.springframework.security:spring-security-data:${spring_security_version}"
+    compile "org.springframework.security:spring-security-web:${spring_security_version}"
+    compile "com.github.mongobee:mongobee:${mongobee_version}"
+    compile("io.springfox:springfox-swagger2:${springfox_version}"){
+        exclude module: 'mapstruct'
+    }
+
+    compile "org.projectlombok:lombok:1.16.8"
+    compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+
+    testCompile("junit:junit")
+    testCompile("org.mockito:mockito-core")
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework.security:spring-security-test"
+    testCompile "org.springframework.boot:spring-boot-test"
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Thymeleaf 3 + Spring 4 example</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="fragments/header :: 'top'"></div>
+
+<div class="panel panel-default">
+    <div th:each="current : ${ratingsList}">
+
+        <div>    <!-- th:object="${travelList}" -->
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Opinia Klienta</div>
+                <div class="panel-body">
+                    <input type="hidden" th:value="${current.id}"/>
+
+                    <p th:text="'Użytkownik: '+${current.userId}"></p>
+                    <p th:text="'Wycieczka: '+${current.travelId}"></p>
+                    <p th:text="'Ocena: '+${current.rating}"></p>
+                    <p th:text="'Komentarz: '+${current.comment}"></p>
+
+                </div>
+                <!--<table class="table">-->
+                <!--</table>-->
+                <div class="panel-footer">
+                    <!--<a th:href="@{/travel/getTravel(travelId=${current.id})}">Zobacz peły opis wycieczki</a>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div th:replace="fragments/footer :: 'footer'"></div>
+</body>
+</html>
