@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.annotation.security.DeclareRoles;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -35,9 +36,6 @@ public class User {
 
     private Role role;
 
-//    private Boolean isNew() {
-//        return getId() != null;
-//    }
 
     public User(final String id,final String firstName, final String lastName, final String login, String password, final Role role) {
         this.id = id;

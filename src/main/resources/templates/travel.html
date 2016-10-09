@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"   xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>JavaTUI Szczegóły podróży</title>
     <script type="application/javascript" th:src="@{http://code.jquery.com/jquery-3.1.0.min.js}"></script>
@@ -16,6 +15,8 @@
 <div th:replace="fragments/header :: 'top'"></div>
 <div class="container">
 
+    Logged user: <span sec:authentication="name">Bob</span>
+    Roles: <span sec:authentication="principal.authorities">[USER, ADMIN]</span>
 
     <div th:object="${travel}">    <!--  th:each="current : ${travelList}" -->
         <h3>Dane Wycieczki</h3>
@@ -35,7 +36,8 @@
                         </div>
 
                         <div class="col-md-5">
-                            <div sec:authorize="hasRole('ADMIN')">
+                            <div sec:authorize="hasAuthority('ADMIN')">
+
                                 <a th:href="@{/travel/edit(travelId=${travel.id})}">Edytuj</a> |
                                 <a th:href="@{/travel/delete(travelId=${travel.id})}">Usuń</a> |
                                 <a th:href="@{/travel/new}">Dodaj wycieczkę</a>
